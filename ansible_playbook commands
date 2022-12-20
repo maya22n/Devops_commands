@@ -1,0 +1,274 @@
+msis@msis:~$ ls
+ 1-write-call           Documents                      node-jenkins-app-example
+ 1-write-call.c         doubletrans.py                 openmpi
+ 2-write-call           Downloads                      package-lock.json
+ 2-write-call.c         dynamodbdata                   phpmysql-app
+ agent                  eclipse-workspace              Pictures
+ agent.jar              gittest                        Public
+ ansible                html5up-paradigm-shift         remoting
+ AnsibleWorkUpdated     HTML-CSS-website               security
+ a.out                  Linux-and-Datastructure-MAHE   snap
+'assig lds'             mc                             sorting
+ assignment2.txt        minio                          storage
+ assignment2.txt.save   msgread                        Templates
+ basic-php-website      msgread.c                      Videos
+ Cloud                  msgwrite                       vrush
+ cse.py                 msgwrite.c                     weavenet_create.yaml
+ CS_exam.py             msis@172                       web
+ Desktop                Music                          workspace
+ devopsrepo             mydata_storage
+ docker                 myminio
+msis@msis:~$ cd AnsibleWorkUpdated/
+msis@msis:~/AnsibleWorkUpdated$ ls
+ansible-apache                          kubernetes-cluster
+Ansible_Linux_Host_Configyration.txt    lampansible
+ansible-playbook-kubernetes             tomcat_ubuntu_ansible_playbook
+Ansible-Windows_Configuration_Host.txt  windosconfig
+ansiblework                             wordpress-playbook
+msis@msis:~/AnsibleWorkUpdated$ sudo ssh-keygen -t rsa
+Generating public/private rsa key pair.
+Enter file in which to save the key (/root/.ssh/id_rsa): myansible
+Enter passphrase (empty for no passphrase): 
+Enter same passphrase again: 
+Your identification has been saved in myansible
+Your public key has been saved in myansible.pub
+The key fingerprint is:
+SHA256:oIXXSok972yHCfxG0464VCgQpWAguM7CpTI8Up6z6m8 root@msis.kubemaster.com
+The key's randomart image is:
++---[RSA 3072]----+
+|*....            |
+|+. o + o         |
+| .o o O .        |
+|. .o * * .       |
+|=oo.o = S .      |
+|=B+  . O *       |
+|+..o  o X o      |
+|  .E . + .       |
+|ooo.  .          |
++----[SHA256]-----+
+msis@msis:~/AnsibleWorkUpdated$ sudo ssh-copy-id -i myansible.pub msis@172.16.518
+/usr/bin/ssh-copy-id: INFO: Source of key(s) to be installed: "myansible.pub"
+/usr/bin/ssh-copy-id: INFO: attempting to log in with the new key(s), to filter out any that are already installed
+
+/usr/bin/ssh-copy-id: ERROR: ssh: connect to host 172.16.2.6 port 22: Connection refused
+
+msis@msis:~/AnsibleWorkUpdated$ sudo ssh-copy-id -i myansible.pub msis@172.16.51.48
+/usr/bin/ssh-copy-id: INFO: Source of key(s) to be installed: "myansible.pub"
+/usr/bin/ssh-copy-id: INFO: attempting to log in with the new key(s), to filter out any that are already installed
+/usr/bin/ssh-copy-id: INFO: 1 key(s) remain to be installed -- if you are prompted now it is to install the new keys
+msis@172.16.51.48's password: 
+
+Number of key(s) added: 1
+
+Now try logging into the machine, with:   "ssh 'msis@172.16.51.48'"
+and check to make sure that only the key(s) you wanted were added.
+
+msis@msis:~/AnsibleWorkUpdated$ ls
+ansible-apache                          lampansible
+Ansible_Linux_Host_Configyration.txt    myansible
+ansible-playbook-kubernetes             myansible.pub
+Ansible-Windows_Configuration_Host.txt  tomcat_ubuntu_ansible_playbook
+ansiblework                             windosconfig
+kubernetes-cluster                      wordpress-playbook
+msis@msis:~/AnsibleWorkUpdated$ cd ansible
+bash: cd: ansible: No such file or directory
+msis@msis:~/AnsibleWorkUpdated$ cd ansible-apache/
+msis@msis:~/AnsibleWorkUpdated/ansible-apache$ ls
+ansible.cfg  apache.retry  apache.yml  hosts  mylabansible  mylabansible.pub
+msis@msis:~/AnsibleWorkUpdated/ansible-apache$ sudo vi hosts 
+msis@msis:~/AnsibleWorkUpdated/ansible-apache$ sudo ansible-playbook apache.yml -c ssh -i hosts --ask-pass
+SSH password: 
+
+PLAY [apache] ******************************************************************
+
+TASK [Gathering Facts] *********************************************************
+fatal: [172.16.51.48]: FAILED! => {"msg": "Missing sudo password"}
+
+PLAY RECAP *********************************************************************
+172.16.51.48               : ok=0    changed=0    unreachable=0    failed=1    skipped=0    rescued=0    ignored=0   
+
+msis@msis:~/AnsibleWorkUpdated/ansible-apache$ sudo ansible-playbook apache.yml -c ssh -i hosts -K
+BECOME password: 
+
+PLAY [apache] ******************************************************************
+
+TASK [Gathering Facts] *********************************************************
+ok: [172.16.51.48]
+
+TASK [install apache2] *********************************************************
+fatal: [172.16.51.48]: FAILED! => {"changed": false, "msg": "Failed to update apt cache: "}
+
+PLAY RECAP *********************************************************************
+172.16.51.48               : ok=1    changed=0    unreachable=0    failed=1    skipped=0    rescued=0    ignored=0   
+
+msis@msis:~/AnsibleWorkUpdated/ansible-apache$ sudo ansible-playbook apache.yml -c ssh -i hosts -K
+BECOME password: 
+
+PLAY [apache] ******************************************************************
+
+TASK [Gathering Facts] *********************************************************
+fatal: [172.16.51.48]: UNREACHABLE! => {"changed": false, "msg": "Failed to connect to the host via ssh: msis@172.16.51.48: Permission denied (publickey,password).", "unreachable": true}
+
+PLAY RECAP *********************************************************************
+172.16.51.48               : ok=0    changed=0    unreachable=1    failed=0    skipped=0    rescued=0    ignored=0   
+
+msis@msis:~/AnsibleWorkUpdated/ansible-apache$ sudo ansible-playbook apache.yml -c ssh -i hosts --ask-pass
+SSH password: 
+
+PLAY [apache] ******************************************************************
+
+TASK [Gathering Facts] *********************************************************
+fatal: [172.16.51.48]: FAILED! => {"msg": "Missing sudo password"}
+
+PLAY RECAP *********************************************************************
+172.16.51.48               : ok=0    changed=0    unreachable=0    failed=1    skipped=0    rescued=0    ignored=0   
+
+msis@msis:~/AnsibleWorkUpdated/ansible-apache$ sudo ansible-playbook apache.yml -c ssh -i hosts -K
+BECOME password: 
+
+PLAY [apache] ******************************************************************
+
+TASK [Gathering Facts] *********************************************************
+ok: [172.16.51.48]
+
+TASK [install apache2] *********************************************************
+ok: [172.16.51.48]
+
+PLAY RECAP *********************************************************************
+172.16.51.48               : ok=2    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+
+msis@msis:~/AnsibleWorkUpdated/ansible-apache$ ls
+ansible.cfg  apache.retry  apache.yml  hosts  mylabansible  mylabansible.pub
+msis@msis:~/AnsibleWorkUpdated/ansible-apache$ cd ..
+msis@msis:~/AnsibleWorkUpdated$ ls
+ansible-apache                          lampansible
+Ansible_Linux_Host_Configyration.txt    myansible
+ansible-playbook-kubernetes             myansible.pub
+Ansible-Windows_Configuration_Host.txt  tomcat_ubuntu_ansible_playbook
+ansiblework                             windosconfig
+kubernetes-cluster                      wordpress-playbook
+msis@msis:~/AnsibleWorkUpdated$ cd lampansible/
+msis@msis:~/AnsibleWorkUpdated/lampansible$ ls
+ansiblekey.pub  index.html      lamp_ubuntu_2004.retry  lamp.yml
+file.retry      lamp_app.retry  lamp_ubuntu_2004.yml    multipurpose
+file.yml        lamp_app.yml    lamp_updated.retry
+hosts           lamp.retry      lamp_updated.yml
+msis@msis:~/AnsibleWorkUpdated/lampansible$ vi lamp.yml 
+msis@msis:~/AnsibleWorkUpdated/lampansible$ vi lamp_app.
+msis@msis:~/AnsibleWorkUpdated/lampansible$ vi lamp_app.yml 
+msis@msis:~/AnsibleWorkUpdated/lampansible$ sudo vi lamp.yml 
+msis@msis:~/AnsibleWorkUpdated/lampansible$ vi lamp_app.yml ^C
+msis@msis:~/AnsibleWorkUpdated/lampansible$ cd ..^C
+msis@msis:~/AnsibleWorkUpdated/lampansible$ vi hosts 
+msis@msis:~/AnsibleWorkUpdated/lampansible$ sudo vi hosts 
+msis@msis:~/AnsibleWorkUpdated/lampansible$ sudo ansible-playbook apache.yml -c ssh -i hosts -K
+ERROR! the playbook: apache.yml could not be found
+msis@msis:~/AnsibleWorkUpdated/lampansible$ sudo ansible-playbook lamp.yml -c ssh -i hosts -K
+BECOME password: 
+
+PLAY [lampserver] **************************************************************
+
+TASK [Gathering Facts] *********************************************************
+fatal: [172.16.51.48]: UNREACHABLE! => {"changed": false, "msg": "Failed to connect to the host via ssh: msis@172.16.51.48: Permission denied (publickey,password).", "unreachable": true}
+
+PLAY RECAP *********************************************************************
+172.16.51.48               : ok=0    changed=0    unreachable=1    failed=0    skipped=0    rescued=0    ignored=0   
+
+msis@msis:~/AnsibleWorkUpdated/lampansible$ sudo ansible-playbook lamp.yml -c ssh -i hosts --ask-pass
+SSH password: 
+
+PLAY [lampserver] **************************************************************
+
+TASK [Gathering Facts] *********************************************************
+ok: [172.16.51.48]
+
+TASK [install lamp stack] ******************************************************
+fatal: [172.16.51.48]: FAILED! => {"msg": "Missing sudo password"}
+
+PLAY RECAP *********************************************************************
+172.16.51.48               : ok=1    changed=0    unreachable=0    failed=1    skipped=0    rescued=0    ignored=0   
+
+msis@msis:~/AnsibleWorkUpdated/lampansible$ sudo ansible-playbook lamp.yml -c ssh -i hosts -K
+BECOME password: 
+
+PLAY [lampserver] **************************************************************
+
+TASK [Gathering Facts] *********************************************************
+ok: [172.16.51.48]
+
+TASK [install lamp stack] ******************************************************
+ok: [172.16.51.48]
+
+TASK [start apache service] ****************************************************
+ok: [172.16.51.48]
+
+TASK [start mysql service] *****************************************************
+ok: [172.16.51.48]
+
+TASK [create target directory] *************************************************
+ok: [172.16.51.48]
+
+TASK [deploy index.html] *******************************************************
+An exception occurred during task execution. To see the full traceback, use -vvv. The error was: If you are using a module and expect the file to exist on the remote, see the remote_src option
+fatal: [172.16.51.48]: FAILED! => {"changed": false, "msg": "Could not find or access '/home/msis/lampansible/index.html' on the Ansible Controller.\nIf you are using a module and expect the file to exist on the remote, see the remote_src option"}
+
+PLAY RECAP *********************************************************************
+172.16.51.48               : ok=5    changed=0    unreachable=0    failed=1    skipped=0    rescued=0    ignored=0   
+
+msis@msis:~/AnsibleWorkUpdated/lampansible$ sudo vi lamp.yml 
+msis@msis:~/AnsibleWorkUpdated/lampansible$ sudo ansible-playbook lamp.yml -c ssh -i hosts --ask-pass
+SSH password: 
+
+PLAY [lampserver] **************************************************************
+
+TASK [Gathering Facts] *********************************************************
+ok: [172.16.51.48]
+
+TASK [install lamp stack] ******************************************************
+fatal: [172.16.51.48]: FAILED! => {"msg": "Missing sudo password"}
+
+PLAY RECAP *********************************************************************
+172.16.51.48               : ok=1    changed=0    unreachable=0    failed=1    skipped=0    rescued=0    ignored=0   
+
+msis@msis:~/AnsibleWorkUpdated/lampansible$ sudo ansible-playbook lamp.yml -c ssh -i hosts -K
+BECOME password: 
+
+PLAY [lampserver] **************************************************************
+
+TASK [Gathering Facts] *********************************************************
+ok: [172.16.51.48]
+
+TASK [install lamp stack] ******************************************************
+ok: [172.16.51.48]
+
+TASK [start apache service] ****************************************************
+ok: [172.16.51.48]
+
+TASK [start mysql service] *****************************************************
+ok: [172.16.51.48]
+
+TASK [create target directory] *************************************************
+ok: [172.16.51.48]
+
+TASK [deploy index.html] *******************************************************
+changed: [172.16.51.48]
+
+PLAY RECAP *********************************************************************
+172.16.51.48               : ok=6    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+
+msis@msis:~/AnsibleWorkUpdated/lampansible$ cd
+msis@msis:~$ kubectl create deployment nginx --image=nginx
+deployment.apps/nginx created
+msis@msis:~$ kubectl expose deployment nginx --type=NodePort --port=80
+service/nginx exposed
+msis@msis:~$ kubectl get svc
+NAME         TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)        AGE
+kubernetes   ClusterIP   10.96.0.1      <none>        443/TCP        2d21h
+nginx        NodePort    10.102.7.223   <none>        80:31502/TCP   4s
+msis@msis:~$ kubectl delete deployment nginx
+deployment.apps "nginx" deleted
+msis@msis:~$ kubectl delete svc nginx
+service "nginx" deleted
+msis@msis:~$ 
+
+
